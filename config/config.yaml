@@ -1,0 +1,11 @@
+training_pipeline_config:
+  pipeline_name: income_prediction
+  artifact_dir: artifact
+
+data_ingestion_config:
+  dataset_download_url: https://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data
+  raw_data_dir: raw_data 
+  raw_data_file: ingested_file.csv
+  ingested_dir: ingested_data
+  ingested_train_dir: train
+  ingested_test_dir: test 

@@ -2,10 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+pred_vev/
+logs/
 # C extensions
 *.so
-
+.vscode/
+artifact/
 # Distribution / packaging
 .Python
 build/
