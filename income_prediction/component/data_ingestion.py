@@ -1,3 +1,4 @@
+from operator import index
 from tkinter import E
 from income_prediction.logger import logging
 from income_prediction.exception import IncomeException
@@ -6,6 +7,7 @@ import sys,os
 import pandas as pd
 from income_prediction.entity.artifact_entity import DataIngestionArtifact
 from sklearn.model_selection import train_test_split
+import numpy as np
 
 class DataIngestion:
     def __init__(self,data_ingestion_config:DataIngestionConfig):
@@ -24,7 +26,12 @@ class DataIngestion:
             os.makedirs(raw_data_dir,exist_ok=True)
             file_path=self.data_ingestion_config.raw_data_file
             df=pd.read_csv(download_url)
-            df.to_csv(file_path)
+            df.columns=['age','workclass','fnlwgt','education','education_num','marital_status',
+                        'occupation','relationship','race','sex','capital_gain','capital_loss','hours_per_week',
+                        'native_country','wages']
+            df.drop(columns=df.columns[3],axis=1,inplace=True)
+            df[df==' ?']=np.nan
+            df.to_csv(file_path,index=False)
             logging.info(f'download data from {download_url} to {file_path}')
             return file_path
         except Exception as e:
@@ -36,7 +43,7 @@ class DataIngestion:
             file=os.path.basename(self.data_ingestion_config.raw_data_file)
             train_set=None
             test_set=None
-            train_set,test_set=train_test_split(adult_income_data,test_size=0.25,stratify=adult_income_data.iloc[:,-1])
+            train_set,test_set=train_test_split(adult_income_data,test_size=0.25,stratify=adult_income_data.iloc[:,-1],random_state=42)
             train_file_path=os.path.join(self.data_ingestion_config.ingested_train_dir,file)
             test_file_path=os.path.join(self.data_ingestion_config.ingested_test_dir,file)
             
