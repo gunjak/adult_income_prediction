@@ -1,7 +1,7 @@
 from income_prediction.logger import logging
 from income_prediction.exception import IncomeException
 from  income_prediction.entity.entity_config import ModelEvaluationConfig
-from income_prediction.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact,ModelTrainerArtifact,ModelEvaluationArtifact
+from income_prediction.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact,ModelTrainerArtifact,ModelEvaluationArtifact,DataTransformationArtifact
 from  income_prediction.constant import *
 import numpy as np
 import os
@@ -17,13 +17,15 @@ class ModelEvaluation:
     def __init__(self, model_evaluation_config: ModelEvaluationConfig,
                  data_ingestion_artifact: DataIngestionArtifact,
                  data_validation_artifact: DataValidationArtifact,
-                 model_trainer_artifact: ModelTrainerArtifact):
+                 model_trainer_artifact: ModelTrainerArtifact,
+                 data_transformation_artifact: DataTransformationArtifact):
         try:
             logging.info(f"{'>>' * 30}Model Evaluation log started.{'<<' * 30} ")
             self.model_evaluation_config = model_evaluation_config
             self.model_trainer_artifact = model_trainer_artifact
             self.data_ingestion_artifact = data_ingestion_artifact
             self.data_validation_artifact = data_validation_artifact
+            self.data_transformation_artifact= data_transformation_artifact
         except Exception as e:
             raise IncomeException(e, sys) from e
 
@@ -85,7 +87,7 @@ class ModelEvaluation:
         try:
             trained_model_file_path = self.model_trainer_artifact.trained_model_file_path
             trained_model_object = load_object(file_path=trained_model_file_path)
-
+            
             train_file_path = self.data_ingestion_artifact.train_file_path
             test_file_path = self.data_ingestion_artifact.test_file_path
 
@@ -102,6 +104,10 @@ class ModelEvaluation:
 
             # target_column
             logging.info(f"Converting target column into numpy array.")
+            
+            train_dataframe[target_column_name]=train_dataframe[target_column_name].map({' <=50K':0 ,' >50K':1})
+            test_dataframe[target_column_name]=test_dataframe[target_column_name].map({' <=50K':0 ,' >50K':1})
+            
             train_target_arr = np.array(train_dataframe[target_column_name])
             test_target_arr = np.array(test_dataframe[target_column_name])
             logging.info(f"Conversion completed target column into numpy array.")
@@ -112,6 +118,7 @@ class ModelEvaluation:
             test_dataframe.drop(target_column_name, axis=1, inplace=True)
             logging.info(f"Dropping target column from the dataframe completed.")
 
+            
             model = self.get_best_model()
 
             if model is None:

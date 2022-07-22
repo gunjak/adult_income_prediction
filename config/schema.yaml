@@ -1,5 +1,5 @@
 columns:
-  age: int64 
+  age: int64
   workclass: object
   fnlwgt: int64 
   education_num: int64 

@@ -70,7 +70,7 @@ def evaluate_classification_model(model_list: list, X_train:np.ndarray, y_train:
             y_train_pred = model.predict(X_train)
             y_test_pred = model.predict(X_test)
 
-            #Calculating r squared score on training and testing dataset
+            #Calculating accuracy score on training and testing dataset
             train_acc = accuracy_score(y_train, y_train_pred)
             test_acc = accuracy_score(y_test, y_test_pred)
             
