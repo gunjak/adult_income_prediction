@@ -4,7 +4,6 @@ __pycache__/
 *$py.class
 pred_vev/
 saved_models/
-templates/
 logs/
 # C extensions
 *.so

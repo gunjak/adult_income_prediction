@@ -1,4 +1,3 @@
-from tkinter import N
 from flask import Flask, request
 import sys
 
@@ -9,7 +8,7 @@ from  income_prediction.logger import logging
 from  income_prediction.exception import IncomeException
 import os, sys
 import json
-from  income_prediction.config.configuration import Configuartion
+from  income_prediction.config.configuration import Configuration
 from  income_prediction.constant import CONFIG_DIR, get_current_time_stamp
 from  income_prediction.pipeline.pipeline import Pipeline
 from  income_prediction.entity.income_predictor import IncomePredictor, IncomeData
@@ -29,7 +28,7 @@ MODEL_DIR = os.path.join(ROOT_DIR, SAVED_MODELS_DIR_NAME)
 from income_prediction.logger import get_log_dataframe
 
 INCOME_DATA_KEY = "income_data"
-PREDICTION_VALUE_KEY = "prediction_value"
+PREDICTION_VALUE_KEY = "wages"
 
 app = Flask(__name__)
 
@@ -37,7 +36,7 @@ app = Flask(__name__)
 @app.route('/artifact', defaults={'req_path': 'income_prediction'})
 @app.route('/artifact/<path:req_path>')
 def render_artifact_dir(req_path):
-    os.makedirs("income_preditin", exist_ok=True)
+    os.makedirs("income_prediction", exist_ok=True)
     # Joining the base and the requested path
     print(f"req_path: {req_path}")
     abs_path = os.path.join(req_path)
