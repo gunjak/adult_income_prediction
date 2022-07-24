@@ -112,7 +112,7 @@ def predict():
         age= int(request.form['age'])
         workclass = request.form['workclass']
         fnlwgt = int(request.form['fnlwgt'])
-        educatin_num = int(request.form['education_num'])
+        education_num = int(request.form['education_num'])
         marital_status = request.form['marital_statu']
         occupation = request.form['occupation']
         relationship = request.form['relationship']
@@ -126,7 +126,7 @@ def predict():
         income_data = IncomeData(age=age,
                                   workclass=workclass,
                                   fnlwgt=fnlwgt,
-                                  education_num=educatin_num,
+                                  education_num=education_num,
                                   marital_status=marital_status,
                                   occupation=occupation,
                                   relationship=relationship,
